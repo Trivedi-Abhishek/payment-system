@@ -1,0 +1,1 @@
+ALTER TABLE merchant drop column secret;

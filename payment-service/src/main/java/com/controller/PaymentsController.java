@@ -1,6 +1,7 @@
 package com.controller;
 
 import com.entity.Payment;
+import com.kafka.publisher.PaymentInitiatedEventPublisher;
 import com.mapper.PaymentsMapper;
 import com.models.CreatePaymentResponseDTO;
 import com.models.GetPaymentResponseDTO;
@@ -24,10 +25,13 @@ public class PaymentsController {
     // idempotency is only important for post/put operations
     private final RedisService redisService;
 
-    public PaymentsController(CreatePaymentService createPaymentService, GetPaymentService getPaymentService, RedisService redisService) {
+    private final PaymentInitiatedEventPublisher publisher;
+
+    public PaymentsController(CreatePaymentService createPaymentService, GetPaymentService getPaymentService, RedisService redisService, PaymentInitiatedEventPublisher publisher) {
         this.createPaymentService=createPaymentService;
         this.getPaymentService=getPaymentService;
         this.redisService=redisService;
+        this.publisher=publisher;
     }
 
     @PostMapping("/create-payment")
@@ -46,6 +50,8 @@ public class PaymentsController {
 
         // If a merchant retries a payment creation after 6 minutes because their system was slow, you want to still return the cached response, not create a duplicate.
         redisService.setData(key, createPaymentResponseDTO, 24*60L);
+
+        publisher.publishPaymentInitiatedEvents(createPaymentResponseDTO.getPaymentId(), Long.valueOf(merchantId), paymentRequestDTO.getAmountDetails());
 
         return ResponseEntity.ok(createPaymentResponseDTO);
     }

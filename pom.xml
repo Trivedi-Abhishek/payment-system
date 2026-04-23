@@ -23,7 +23,8 @@
 	</developers>
     <modules>
         <module>payment-service</module>
-    </modules>
+	    <module>fraud-service</module>
+	</modules>
     <scm>
 		<connection/>
 		<developerConnection/>

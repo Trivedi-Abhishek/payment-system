@@ -39,15 +39,15 @@ public class HMACAuthFilter extends OncePerRequestFilter {
         String timestamp=request.getHeader("X-timestamp");
         String signature=request.getHeader("X-signature");
 
-        if(!(StringUtils.hasText(merchantId) && StringUtils.hasText(merchantId) &&
-                StringUtils.hasText(merchantId))) {
+        if(!(StringUtils.hasText(merchantId) && StringUtils.hasText(timestamp) &&
+                StringUtils.hasText(signature))) {
             response.sendError(404, "Header missing");
             return;
         }
 
         Long parsedTimestampInMillis;
         try {
-            parsedTimestampInMillis=Long.valueOf(timestamp)*1000;
+            parsedTimestampInMillis=Long.parseLong(timestamp)*1000;
         } catch (NumberFormatException e) {
             response.sendError(404, "Invalid timestamp provided.");
             return;
@@ -71,7 +71,7 @@ public class HMACAuthFilter extends OncePerRequestFilter {
         CachedHttpServletRequest cachedHttpServletRequest=new CachedHttpServletRequest(request);
         byte[] cachedBody = cachedHttpServletRequest.getCachedBody();
         String body = new String(cachedBody, StandardCharsets.UTF_8);
-        String message = timestamp + "." + body;
+        String message = parsedTimestampInMillis + "." + body;
 
         String expected = computeHmac(message, secret);
 

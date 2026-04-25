@@ -10,7 +10,13 @@ import lombok.NoArgsConstructor;
 public class PaymentInitiatedEvent {
 
     private Long paymentId;
-    private Long amount;
-    private String currency;
+    private AmountDetails amountDetails;
     private Long merchantId;
+
+
+    public PaymentInitiatedEvent(CreatePaymentResponseDTO createPaymentResponseDTO) {
+        this.paymentId= createPaymentResponseDTO.getPaymentId();
+        this.merchantId=createPaymentResponseDTO.getMerchantId();
+        this.amountDetails=createPaymentResponseDTO.getAmountDetails();
+    }
 }

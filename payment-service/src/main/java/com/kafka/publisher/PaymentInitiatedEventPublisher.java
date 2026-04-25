@@ -22,11 +22,11 @@ public class PaymentInitiatedEventPublisher {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    public void publishPaymentInitiatedEvents(Long paymentId, Long merchantId, AmountDetails amountDetails) {
+    public void publishPaymentInitiatedEvents(CreatePaymentResponseDTO createPaymentResponseDTO) {
 
-        PaymentInitiatedEvent paymentInitiatedEvent=new PaymentInitiatedEvent(paymentId, amountDetails.getAmount(), amountDetails.getCurrencyCode().name(), merchantId);
+        PaymentInitiatedEvent paymentInitiatedEvent=new PaymentInitiatedEvent(createPaymentResponseDTO);
         try {
-            CompletableFuture<SendResult<String, String>> paymentInitiatedEventFuture = kafkaTemplate.send("payments.initiated-payment", String.valueOf(paymentId), objectMapper.writeValueAsString(paymentInitiatedEvent));
+            CompletableFuture<SendResult<String, String>> paymentInitiatedEventFuture = kafkaTemplate.send("payments.initiated-payment", String.valueOf(createPaymentResponseDTO.getPaymentId()), objectMapper.writeValueAsString(paymentInitiatedEvent));
 
             paymentInitiatedEventFuture.whenComplete((result, exception)->{
 

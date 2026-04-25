@@ -15,7 +15,7 @@ public class CreatePaymentService {
 
     private final PaymentsRepository paymentsRepository;
 
-    public Long createPayment(PaymentRequestDTO paymentRequestDTO, String idempotentKey) {
+    public Payment createPayment(PaymentRequestDTO paymentRequestDTO, String idempotentKey) {
 
         Date currentDate=new Date();
 
@@ -24,8 +24,7 @@ public class CreatePaymentService {
                 .createdAt(currentDate).reason(paymentRequestDTO.getReason()).idempotentKey(idempotentKey)
                 .transactionStatus(TransactionStatusEnum.INITIATED).build();
 
-        Payment savedPayment = paymentsRepository.save(payment);
-        return savedPayment.getId();
+        return paymentsRepository.save(payment);
 
     }
 }

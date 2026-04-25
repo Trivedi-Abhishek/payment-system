@@ -45,13 +45,13 @@ public class PaymentsController {
             return ResponseEntity.ok(cachedData);
         }
 
-        Long paymentId = createPaymentService.createPayment(paymentRequestDTO, idempotencyKey);
-        CreatePaymentResponseDTO createPaymentResponseDTO=new CreatePaymentResponseDTO(paymentId);
+        Payment payment = createPaymentService.createPayment(paymentRequestDTO, idempotencyKey);
+        CreatePaymentResponseDTO createPaymentResponseDTO=new CreatePaymentResponseDTO(payment, Long.valueOf(merchantId));
 
-        // If a merchant retries a payment creation after 6 minutes because their system was slow, you want to still return the cached response, not create a duplicate.
+        // If a merchant retries a payment creation within 1 day minutes because their system was slow, you want to still return the cached response, not create a duplicate.
         redisService.setData(key, createPaymentResponseDTO, 24*60L);
 
-        publisher.publishPaymentInitiatedEvents(createPaymentResponseDTO.getPaymentId(), Long.valueOf(merchantId), paymentRequestDTO.getAmountDetails());
+        publisher.publishPaymentInitiatedEvents(createPaymentResponseDTO);
 
         return ResponseEntity.ok(createPaymentResponseDTO);
     }

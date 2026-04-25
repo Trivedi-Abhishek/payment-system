@@ -1,5 +1,8 @@
 package com.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.models.CreatePaymentResponseDTO;
+import com.models.PaymentRequestDTO;
 import com.repository.MerchantRepository;
 import com.utils.CachedHttpServletRequest;
 import jakarta.servlet.FilterChain;
@@ -31,6 +34,7 @@ public class HMACAuthFilter extends OncePerRequestFilter {
     private final Long TIME_DIFF_ALLOWED=30L*60*1000; //30 mins
 
     private final MerchantRepository merchantRepository;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -71,7 +75,8 @@ public class HMACAuthFilter extends OncePerRequestFilter {
         CachedHttpServletRequest cachedHttpServletRequest=new CachedHttpServletRequest(request);
         byte[] cachedBody = cachedHttpServletRequest.getCachedBody();
         String body = new String(cachedBody, StandardCharsets.UTF_8);
-        String message = parsedTimestampInMillis + "." + body;
+        PaymentRequestDTO paymentRequestDTO = objectMapper.readValue(body, PaymentRequestDTO.class);
+        String message = timestamp + "." + merchantId+"."+paymentRequestDTO.getAmountDetails().getAmount()+'.'+paymentRequestDTO.getAmountDetails().getCurrencyCode()+'.'+paymentRequestDTO.getReason();
 
         String expected = computeHmac(message, secret);
 

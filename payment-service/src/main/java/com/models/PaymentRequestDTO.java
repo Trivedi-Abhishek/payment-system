@@ -8,9 +8,6 @@ import lombok.NonNull;
 @Data
 public class PaymentRequestDTO {
 
-    @JsonProperty("merchant_id")
-    private Long merchantId;
-
     @JsonProperty("amount_details")
     private AmountDetails amountDetails;
 

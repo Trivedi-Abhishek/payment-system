@@ -1,4 +1,4 @@
-package com.config;
+package com.config.kafka;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;
@@ -15,5 +15,10 @@ public class KafkaConfig {
     @Bean
     public NewTopic createFraudCheckedPaymentTopic() {
         return new NewTopic("payments.fraud-checked-payment", 3, (short) 1);
+    }
+
+    @Bean
+    public NewTopic createDLQTopic() {
+        return new NewTopic("payments.dlq", 1, (short) 1);
     }
 }

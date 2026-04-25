@@ -48,6 +48,9 @@ public class FraudCheckConsumer {
         }
         catch (JsonProcessingException e) {
             log.error(e.getMessage());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw e;
         }
 
     }

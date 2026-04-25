@@ -11,6 +11,7 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
+    listener:
+      ack-mode: manual
 server:
   port: 8082

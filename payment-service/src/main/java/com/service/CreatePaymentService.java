@@ -15,14 +15,14 @@ public class CreatePaymentService {
 
     private final PaymentsRepository paymentsRepository;
 
-    public Payment createPayment(PaymentRequestDTO paymentRequestDTO, String idempotentKey) {
+    public Payment createPayment(PaymentRequestDTO paymentRequestDTO, String idempotentKey, Long merchantId) {
 
         Date currentDate=new Date();
 
         Payment payment = Payment.builder().amount(paymentRequestDTO.getAmountDetails().getAmount())
                 .currencyCode(paymentRequestDTO.getAmountDetails().getCurrencyCode())
                 .createdAt(currentDate).reason(paymentRequestDTO.getReason()).idempotentKey(idempotentKey)
-                .transactionStatus(TransactionStatusEnum.INITIATED).build();
+                .transactionStatus(TransactionStatusEnum.INITIATED).merchantId(merchantId).userId(Long.valueOf(paymentRequestDTO.getUserId())).build();
 
         return paymentsRepository.save(payment);
 

@@ -12,6 +12,12 @@ public class GetPaymentResponseDTO {
     @JsonProperty("payment_id")
     private Long paymentId;
 
+    @JsonProperty("merchant_id")
+    private Long merchantId;
+
+    @JsonProperty("user_id")
+    private Long userId;
+
     @JsonProperty("amount_details")
     private AmountDetails amountDetails;
 

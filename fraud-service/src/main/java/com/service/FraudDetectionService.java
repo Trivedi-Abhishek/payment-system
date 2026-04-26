@@ -33,11 +33,12 @@ public class FraudDetectionService {
         // 1. check with VelocityRuleEngine if SUSPICIOUS then send request to LLM
         RuleResult ruleResult = velocityRuleEngine.getRuleResult(paymentInitiatedEvent);
 
+        FraudCheckResultEvent fraudCheckResultEvent=new FraudCheckResultEvent();
+        fraudCheckResultEvent.setPaymentId(paymentInitiatedEvent.getPaymentId());
+        fraudCheckResultEvent.setPaymentInitiatedEvent(paymentInitiatedEvent);
+
         // ask llm
         if(FraudCheckEnum.SUSPICIOUS.equals(ruleResult.getFraudCheck())) {
-
-            FraudCheckResultEvent fraudCheckResultEvent=new FraudCheckResultEvent();
-            fraudCheckResultEvent.setPaymentId(paymentInitiatedEvent.getPaymentId());
 
             try {
                 String content = chatClient.prompt().user(promptUserSpec -> {
@@ -65,9 +66,12 @@ public class FraudDetectionService {
                 fraudCheckResultEvent.setReason("Auto approved, error while receiving request from llm.");
             }
 
-            return fraudCheckResultEvent;
+        }
+        else {
+            fraudCheckResultEvent.setDecision(ruleResult.getFraudCheck().name());
+            fraudCheckResultEvent.setReason(String.join(", ", ruleResult.getFlagList()));
         }
 
-        return new FraudCheckResultEvent(paymentInitiatedEvent.getPaymentId(), ruleResult.getFraudCheck().name(), String.join(", ", ruleResult.getFlagList()));
+        return fraudCheckResultEvent;
     }
 }

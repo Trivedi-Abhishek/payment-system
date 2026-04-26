@@ -19,6 +19,8 @@ import java.util.Objects;
 @RequestMapping("/api/payments")
 public class PaymentsController {
 
+    //TODO: create user-register api
+
     private final CreatePaymentService createPaymentService;
     private final GetPaymentService getPaymentService;
 
@@ -45,7 +47,7 @@ public class PaymentsController {
             return ResponseEntity.ok(cachedData);
         }
 
-        Payment payment = createPaymentService.createPayment(paymentRequestDTO, idempotencyKey);
+        Payment payment = createPaymentService.createPayment(paymentRequestDTO, idempotencyKey, Long.valueOf(merchantId));
         CreatePaymentResponseDTO createPaymentResponseDTO=new CreatePaymentResponseDTO(payment, Long.valueOf(merchantId));
 
         // If a merchant retries a payment creation within 1 day minutes because their system was slow, you want to still return the cached response, not create a duplicate.

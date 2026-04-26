@@ -1,4 +1,4 @@
-package com.models;
+package com.ledgerservice.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,4 +13,5 @@ public class FraudCheckResultEvent {
     private String decision;
     private String reason;
     private PaymentInitiatedEvent paymentInitiatedEvent;
+
 }

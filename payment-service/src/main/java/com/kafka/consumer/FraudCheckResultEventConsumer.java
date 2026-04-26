@@ -17,7 +17,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class SuccessFraudCheckEventConsumer {
+public class FraudCheckResultEventConsumer {
 
     private final PaymentsRepository paymentsRepository;
     private final ObjectMapper objectMapper;
@@ -46,6 +46,5 @@ public class SuccessFraudCheckEventConsumer {
             log.error(e.getMessage());
             throw e;
         }
-
     }
 }

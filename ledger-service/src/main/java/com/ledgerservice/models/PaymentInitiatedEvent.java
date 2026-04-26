@@ -1,4 +1,4 @@
-package com.models;
+package com.ledgerservice.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 public class PaymentInitiatedEvent {
 
     private Long paymentId;
-    private Long amount;
-    private String currency;
+    private AmountDetails amountDetails;
     private Long merchantId;
     private Long userId;
 }

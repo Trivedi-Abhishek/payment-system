@@ -10,6 +10,8 @@ public class PaymentsMapper {
 
         GetPaymentResponseDTO getPaymentResponseDTO=new GetPaymentResponseDTO();
         getPaymentResponseDTO.setPaymentId(payment.getId());
+        getPaymentResponseDTO.setMerchantId(payment.getMerchantId());
+        getPaymentResponseDTO.setUserId(payment.getUserId());
         getPaymentResponseDTO.setAmountDetails(new AmountDetails(payment.getAmount(), payment.getCurrencyCode()));
         getPaymentResponseDTO.setTransactionStatus(payment.getTransactionStatus());
         getPaymentResponseDTO.setReason(payment.getReason());

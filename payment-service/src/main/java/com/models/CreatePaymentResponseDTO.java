@@ -20,9 +20,13 @@ public class CreatePaymentResponseDTO {
     @JsonProperty("amount_details")
     private AmountDetails amountDetails;
 
+    @JsonProperty("user_id")
+    private Long userId;
+
     public CreatePaymentResponseDTO(Payment payment, Long merchantId) {
         this.paymentId=payment.getId();
         this.merchantId=merchantId;
         this.amountDetails= new AmountDetails(payment.getAmount(), payment.getCurrencyCode());
+        this.userId=payment.getUserId();
     }
 }

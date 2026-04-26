@@ -22,6 +22,12 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="merchant_id", nullable=false)
+    private Long merchantId;
+
+    @Column(name="user_id", nullable=false)
+    private Long userId;
+
     @Column(name = "amount", nullable = false)
     private Long amount;
 

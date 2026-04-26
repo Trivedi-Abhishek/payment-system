@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.models.FraudCheckResultEvent;
 import com.models.PaymentInitiatedEvent;
+import com.service.FraudDetectionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -21,6 +22,7 @@ public class FraudCheckConsumer {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
+    private final FraudDetectionService fraudDetectionService;
 
     @KafkaListener(topics = "payments.initiated-payment", groupId = "fraud-service-group")
     public void consume(String paymentInitiatedEventMessage) {
@@ -28,7 +30,7 @@ public class FraudCheckConsumer {
         try {
             PaymentInitiatedEvent paymentInitiatedEvent = objectMapper.readValue(paymentInitiatedEventMessage, PaymentInitiatedEvent.class);
 
-            FraudCheckResultEvent fraudCheckResultEvent=new FraudCheckResultEvent(paymentInitiatedEvent.getPaymentId(), "APPROVED", "Approved");
+            FraudCheckResultEvent fraudCheckResultEvent = fraudDetectionService.getFraudCheckResultEvent(paymentInitiatedEvent);
             String resultJson = objectMapper.writeValueAsString(fraudCheckResultEvent);
             CompletableFuture<SendResult<String, String>> fraudCheckedEventFuture = kafkaTemplate.send("payments.fraud-checked-payment", String.valueOf(paymentInitiatedEvent.getPaymentId()), resultJson);
 

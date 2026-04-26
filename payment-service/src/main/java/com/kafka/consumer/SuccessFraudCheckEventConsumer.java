@@ -30,7 +30,8 @@ public class SuccessFraudCheckEventConsumer {
             Optional<Payment> paymentOptional = paymentsRepository.findById(fraudCheckResultEvent.getPaymentId());
             if(paymentOptional.isPresent()) {
                 Payment payment = paymentOptional.get();
-                payment.setTransactionStatus("APPROVED".equals(fraudCheckResultEvent.getDecision()) ? TransactionStatusEnum.FRAUD_CHECKED:TransactionStatusEnum.FAILED);
+                payment.setTransactionStatus("VALID".equals(fraudCheckResultEvent.getDecision()) ? TransactionStatusEnum.FRAUD_CHECKED:TransactionStatusEnum.FAILED);
+                payment.setReason(fraudCheckResultEvent.getReason());
                 payment.setUpdatedAt(new Date());
                 paymentsRepository.save(payment);
             }

@@ -1,18 +1,19 @@
 package com.utils;
 
 import com.enums.FraudCheckEnum;
-import com.models.PaymentInitiatedEvent;
+import com.paymentservice.models.PaymentInitiatedEvent;
 import com.models.RuleResult;
-import com.repository.PaymentsRepository;
+import com.paymentservice.repository.PaymentsRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Service
 @Data
 @RequiredArgsConstructor
 public class VelocityRuleEngine {

@@ -1,11 +1,11 @@
 package com.ledgerservice.service;
 
+import com.paymentservice.enums.CurrencyCodeEnum;
 import com.ledgerservice.entity.LedgerEntry;
-import com.ledgerservice.enums.CurrencyCodeEnum;
 import com.ledgerservice.enums.TxnTypeEnum;
-import com.ledgerservice.models.FraudCheckResultEvent;
 import com.ledgerservice.models.LedgerEntryAmountProjections;
 import com.ledgerservice.repository.LedgerEntryRepository;
+import com.paymentservice.models.FraudCheckResultEvent;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

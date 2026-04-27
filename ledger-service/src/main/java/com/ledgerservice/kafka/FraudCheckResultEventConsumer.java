@@ -2,8 +2,8 @@ package com.ledgerservice.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ledgerservice.models.FraudCheckResultEvent;
 import com.ledgerservice.service.LedgerService;
+import com.paymentservice.models.FraudCheckResultEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;

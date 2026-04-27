@@ -2,8 +2,8 @@ package com.kafka.consumer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.models.FraudCheckResultEvent;
-import com.models.PaymentInitiatedEvent;
+import com.paymentservice.models.FraudCheckResultEvent;
+import com.paymentservice.models.PaymentInitiatedEvent;
 import com.service.FraudDetectionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

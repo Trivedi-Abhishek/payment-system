@@ -1,6 +1,6 @@
 package com.ledgerservice.entity;
 
-import com.ledgerservice.enums.CurrencyCodeEnum;
+import com.paymentservice.enums.CurrencyCodeEnum;
 import com.ledgerservice.enums.TxnTypeEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

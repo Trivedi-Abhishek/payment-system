@@ -31,7 +31,7 @@ public class HMACAuthFilter extends OncePerRequestFilter {
     //4. compute timestamp.body hmac
     //5. compare expected and signature
 
-    private final Long TIME_DIFF_ALLOWED=30L*60*1000; //30 mins
+    private final Long TIME_DIFF_ALLOWED=120L*60*1000; //120 mins
 
     private final MerchantRepository merchantRepository;
     private final ObjectMapper objectMapper;

@@ -28,7 +28,7 @@ public class FraudCheckResultEventConsumer {
     public void consumeSuccessFraudCheckEvent(String fraudCheckResultEventMessage) {
 
         try {
-            FraudCheckResultEvent fraudCheckResultEvent = objectMapper.readValue(objectMapper.writeValueAsString(fraudCheckResultEventMessage), FraudCheckResultEvent.class);
+            FraudCheckResultEvent fraudCheckResultEvent = objectMapper.readValue(fraudCheckResultEventMessage, FraudCheckResultEvent.class);
             Optional<Payment> paymentOptional = paymentsRepository.findById(fraudCheckResultEvent.getPaymentId());
             if(paymentOptional.isPresent()) {
                 Payment payment = paymentOptional.get();

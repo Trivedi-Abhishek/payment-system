@@ -29,10 +29,10 @@ public class LedgerService {
 
         Date currentDate=new Date();
         Long paymentId = fraudCheckResultEvent.getPaymentId();
-        Long merchantId = fraudCheckResultEvent.getPaymentInitiatedEvent().getMerchantId();
-        Long userId = fraudCheckResultEvent.getPaymentInitiatedEvent().getUserId();
-        Long amount = fraudCheckResultEvent.getPaymentInitiatedEvent().getAmountDetails().getAmount();
-        CurrencyCodeEnum currencyCode = fraudCheckResultEvent.getPaymentInitiatedEvent().getAmountDetails().getCurrencyCode();
+        Long merchantId = fraudCheckResultEvent.getMerchantId();
+        Long userId = fraudCheckResultEvent.getUserId();
+        Long amount = fraudCheckResultEvent.getAmountDetails().getAmount();
+        CurrencyCodeEnum currencyCode = fraudCheckResultEvent.getAmountDetails().getCurrencyCode();
 
         LedgerEntry creditLedgerEntry = LedgerEntry.builder().paymentId(paymentId)
                 .accountId(merchantId).txnType(TxnTypeEnum.CREDIT).amount(amount)

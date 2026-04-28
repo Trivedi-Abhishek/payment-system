@@ -35,7 +35,9 @@ public class FraudDetectionService {
 
         FraudCheckResultEvent fraudCheckResultEvent=new FraudCheckResultEvent();
         fraudCheckResultEvent.setPaymentId(paymentInitiatedEvent.getPaymentId());
-        fraudCheckResultEvent.setPaymentInitiatedEvent(paymentInitiatedEvent);
+        fraudCheckResultEvent.setMerchantId(paymentInitiatedEvent.getMerchantId());
+        fraudCheckResultEvent.setUserId(paymentInitiatedEvent.getUserId());
+        fraudCheckResultEvent.setAmountDetails(paymentInitiatedEvent.getAmountDetails());
 
         // ask llm
         if(FraudCheckEnum.SUSPICIOUS.equals(ruleResult.getFraudCheck())) {

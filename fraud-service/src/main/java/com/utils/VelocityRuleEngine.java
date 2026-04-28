@@ -1,6 +1,7 @@
 package com.utils;
 
 import com.enums.FraudCheckEnum;
+import com.paymentservice.models.CountAmountProjections;
 import com.paymentservice.models.PaymentInitiatedEvent;
 import com.models.RuleResult;
 import com.paymentservice.repository.PaymentsRepository;
@@ -34,9 +35,9 @@ public class VelocityRuleEngine {
         LocalDateTime fromTime = LocalDateTime.now().minusMinutes(5L);
 
         // collect the count of txns and txn amount for the given merchant over the past 5 minutes and check whether it is fraud/suspicious/valid
-        Object[] countAndAmountSumByMerchantId = paymentsRepository.findCountAndAmountSumByMerchantId(merchantId, fromTime);
-        Long count= (Long) countAndAmountSumByMerchantId[0];
-        Long amount= (Long) countAndAmountSumByMerchantId[1];
+        CountAmountProjections countAmountProjections = paymentsRepository.findCountAndAmountSumByMerchantId(merchantId, fromTime);
+        Long count = countAmountProjections.getCount();
+        Long amount = countAmountProjections.getAmount();
 
         computeFlags(count, amount, ruleResult);
 

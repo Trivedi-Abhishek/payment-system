@@ -12,6 +12,7 @@ public class FraudCheckResultEvent {
     private Long paymentId;
     private String decision;
     private String reason;
-    private PaymentInitiatedEvent paymentInitiatedEvent;
-
+    private Long merchantId;
+    private Long userId;
+    private AmountDetails amountDetails;
 }

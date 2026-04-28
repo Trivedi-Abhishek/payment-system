@@ -2,6 +2,7 @@ package com.paymentservice.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paymentservice.utils.ExceptionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,6 +29,7 @@ public class RedisService {
             return objectMapper.readValue(responseClassObject, responseClass);
         } catch (JsonProcessingException e) {
             log.error("Failed to deserialize Redis value for key={} error={}", key, e.getMessage());
+            ExceptionUtil.throwInternalServerException(responseClass.getName(), "Error parsing json");
         }
         return null;
     }
@@ -39,6 +41,7 @@ public class RedisService {
             redisTemplate.opsForValue().set(key, jsonValueObject, ttl, TimeUnit.MINUTES);
         } catch (JsonProcessingException e) {
             log.error("Failed to deserialize Redis value for key={} error={}", key, e.getMessage());
+            ExceptionUtil.throwInternalServerException(valueObject.getClass().getName(), "Error parsing json");
         }
     }
 }

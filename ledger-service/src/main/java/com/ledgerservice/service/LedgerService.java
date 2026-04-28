@@ -6,6 +6,7 @@ import com.ledgerservice.enums.TxnTypeEnum;
 import com.ledgerservice.models.LedgerEntryAmountProjections;
 import com.ledgerservice.repository.LedgerEntryRepository;
 import com.paymentservice.models.FraudCheckResultEvent;
+import com.paymentservice.utils.ExceptionUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,7 @@ public class LedgerService {
             }
             return;
         }
-        throw new EntityNotFoundException("ledger entry not found");
+        ExceptionUtil.throwResourceNotFoundException(null, "ledger entry not found");
 
     }
 }

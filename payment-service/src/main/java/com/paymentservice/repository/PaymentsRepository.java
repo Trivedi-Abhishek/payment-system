@@ -20,4 +20,6 @@ public interface PaymentsRepository extends JpaRepository<Payment, Long> {
             @Param("merchantId") Long merchantId,
             @Param("fromTime") LocalDateTime fromTime
     );
+
+    boolean existsByMerchantIdAndIdempotentKey(Long merchantId, String idempotentKey);
 }

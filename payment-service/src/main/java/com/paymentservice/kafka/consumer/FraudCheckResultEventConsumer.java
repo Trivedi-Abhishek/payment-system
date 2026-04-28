@@ -5,7 +5,9 @@ import com.paymentservice.enums.TransactionStatusEnum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paymentservice.models.FraudCheckResultEvent;
+import com.paymentservice.models.PaymentInitiatedEvent;
 import com.paymentservice.repository.PaymentsRepository;
+import com.paymentservice.utils.ExceptionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -37,14 +39,17 @@ public class FraudCheckResultEventConsumer {
             }
             else{
                 log.error("No payment found");
+                ExceptionUtil.throwResourceNotFoundException("PAYMENT_NOT_FOUND", "No payment exists for the given payment_id");
             }
         }
         catch (JsonProcessingException e) {
             log.error(e.getMessage());
+            ExceptionUtil.throwInternalServerException(FraudCheckResultEvent.class.getName(), "Error parsing json");
+
         }
         catch (Exception e) {
             log.error(e.getMessage());
-            throw e;
+            ExceptionUtil.throwInternalServerException(null, "Internal server error occurred while consuming event");
         }
     }
 }

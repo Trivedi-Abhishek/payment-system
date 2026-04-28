@@ -44,7 +44,7 @@ public class FraudCheckConsumer {
                     log.info("Fraud checked payment event published to topic: {}, partition: {}, offset: {}",topic, partition, offset);
                 }
                 else {
-                    log.info("Exception occurred: {}", exception.getMessage());
+                    log.error("Exception occurred: {}", exception.getMessage());
                 }
             });
         }

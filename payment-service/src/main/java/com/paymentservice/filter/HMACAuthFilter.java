@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paymentservice.models.PaymentRequestDTO;
 import com.paymentservice.repository.MerchantRepository;
 import com.paymentservice.utils.CachedHttpServletRequest;
+import com.paymentservice.utils.ExceptionUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -44,7 +45,7 @@ public class HMACAuthFilter extends OncePerRequestFilter {
 
         if(!(StringUtils.hasText(merchantId) && StringUtils.hasText(timestamp) &&
                 StringUtils.hasText(signature))) {
-            response.sendError(404, "Header missing");
+            ExceptionUtil.throwBadRequestException("REQUIRED_HEADERS_MISSING", "Mandatory headers missing.");
             return;
         }
 
@@ -52,12 +53,12 @@ public class HMACAuthFilter extends OncePerRequestFilter {
         try {
             parsedTimestampInMillis=Long.parseLong(timestamp)*1000;
         } catch (NumberFormatException e) {
-            response.sendError(404, "Invalid timestamp provided.");
+            ExceptionUtil.throwBadRequestException("INVALID_TIMESTAMP", "Invalid value in X-timestamp header.");
             return;
         }
 
         if((System.currentTimeMillis()-parsedTimestampInMillis)>TIME_DIFF_ALLOWED) {
-            response.sendError(404, "Authorization time expired.");
+            ExceptionUtil.throwBadRequestException("AUTHORIZATION_EXPIRED", "Authorization time expired.");
             return;
         }
 
@@ -65,7 +66,7 @@ public class HMACAuthFilter extends OncePerRequestFilter {
         try {
             parsedMerchantId=Long.valueOf(merchantId);
         } catch (NumberFormatException e) {
-            response.sendError(404, "Invalid merchant_id provided.");
+            ExceptionUtil.throwBadRequestException("INVALID_MERCHANT_ID", "Invalid value in X-merchant-id header.");
             return;
         }
 
@@ -80,7 +81,7 @@ public class HMACAuthFilter extends OncePerRequestFilter {
         String expected = computeHmac(message, secret);
 
         if(!MessageDigest.isEqual(expected.getBytes(), signature.getBytes())) {
-            response.sendError(403, "Authorization failed.");
+            ExceptionUtil.throwBadRequestException("AUTHORIZATION_FAILED", "Authorization failed.");
         }
 
         request.setAttribute("merchantId", merchantId);
@@ -96,7 +97,8 @@ public class HMACAuthFilter extends OncePerRequestFilter {
             byte[] hash = mac.doFinal(message.getBytes(StandardCharsets.UTF_8));
             return HexFormat.of().formatHex(hash);
         } catch (Exception e) {
-            throw new RuntimeException("HMAC computation failed", e);
+            ExceptionUtil.throwInternalServerException(null, "HMAC computation failed");
         }
+        return null;
     }
 }

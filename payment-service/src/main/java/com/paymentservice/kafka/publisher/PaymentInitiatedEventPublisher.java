@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paymentservice.models.CreatePaymentResponseDTO;
 import com.paymentservice.models.PaymentInitiatedEvent;
+import com.paymentservice.utils.ExceptionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -38,11 +39,13 @@ public class PaymentInitiatedEventPublisher {
                 }
                 else {
                     log.error("Exception occurred: {}", exception.getMessage());
+                    ExceptionUtil.throwInternalServerException(null, "Error pushing events to kafka");
                 }
             });
         }
         catch (JsonProcessingException e) {
             log.error(e.getMessage());
+            ExceptionUtil.throwInternalServerException(PaymentInitiatedEvent.class.getName(), "Error parsing json");
         }
 
     }

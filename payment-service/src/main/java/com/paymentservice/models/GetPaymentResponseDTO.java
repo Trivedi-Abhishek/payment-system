@@ -1,0 +1,32 @@
+package com.paymentservice.models;
+
+import com.paymentservice.enums.TransactionStatusEnum;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
+
+import java.util.Date;
+
+@Data
+public class GetPaymentResponseDTO {
+
+    @JsonProperty("payment_id")
+    private Long paymentId;
+
+    @JsonProperty("merchant_id")
+    private Long merchantId;
+
+    @JsonProperty("user_id")
+    private Long userId;
+
+    @JsonProperty("amount_details")
+    private AmountDetails amountDetails;
+
+    @JsonProperty("reason")
+    private String reason;
+
+    @JsonProperty("transaction_status")
+    private TransactionStatusEnum transactionStatus;
+
+    @JsonProperty("created_at")
+    private Date createdAt;
+}
